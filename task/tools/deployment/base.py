@@ -1,3 +1,4 @@
+import asyncio
 import json
 from abc import ABC, abstractmethod
 
@@ -6,7 +7,7 @@ from pydantic import StrictStr
 
 from task.tools.base import BaseTool
 
-from aidial_sdk.chat_completion import Stage, Message, Role, ToolCall
+from aidial_sdk.chat_completion import Stage, Message, Role, ToolCall, Response
 
 
 class DeploymentTool(BaseTool, ABC):
@@ -21,7 +22,7 @@ class DeploymentTool(BaseTool, ABC):
     def deployment_name(self) -> str:
         pass
 
-    async def execute(self, tool_call: ToolCall, stage: Stage) -> Message:
+    async def execute(self, tool_call: ToolCall, stage: Stage, response: Response) -> Message:
         client: AsyncAzureOpenAI = AsyncAzureOpenAI(
             azure_endpoint=self.endpoint,
             api_key=self.api_key,
@@ -38,6 +39,9 @@ class DeploymentTool(BaseTool, ABC):
         content=''
         async for chunk in chunks:
             if chunk.choices and len(chunk.choices) > 0:
+                await response.aflush()
+                await asyncio.sleep(3)
+                print(chunk)
                 delta = chunk.choices[0].delta
                 if delta and delta.content:
                     stage.append_content(delta.content)

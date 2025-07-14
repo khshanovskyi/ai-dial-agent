@@ -3,7 +3,7 @@ import json
 from typing import Any
 
 from aidial_client.types.chat.legacy.chat_completion import CustomContent, ToolCall
-from aidial_sdk.chat_completion import Message, Role, Choice, Request
+from aidial_sdk.chat_completion import Message, Role, Choice, Request, Response
 from openai import AsyncAzureOpenAI
 
 from task.tools.base import BaseTool
@@ -39,7 +39,7 @@ class LLMAgent:
         }
 
     async def handle_request(
-            self, choice: Choice, deployment_name: str, **kwargs
+            self, choice: Choice, deployment_name: str, response: Response, **kwargs
     ) -> Message:
         client: AsyncAzureOpenAI = AsyncAzureOpenAI(
             azure_endpoint=self.endpoint,
@@ -90,7 +90,8 @@ class LLMAgent:
             tasks = [
                 self._process_tool_call(
                     tool_call=tool_call,
-                    choice=choice
+                    choice=choice,
+                    response=response,
                 )
                 for tool_call in assistant_message.tool_calls
             ]
@@ -99,7 +100,7 @@ class LLMAgent:
             self.state[TOOL_CALL_HISTORY_KEY].append(assistant_message.dict())
             self.state[TOOL_CALL_HISTORY_KEY].extend(tool_messages)
 
-            return await self.handle_request(choice, deployment_name, **kwargs)
+            return await self.handle_request(choice, deployment_name, response, **kwargs)
 
         choice.set_state(self.state)
 
@@ -123,7 +124,7 @@ class LLMAgent:
 
         return unpacked_messages
 
-    async def _process_tool_call(self, tool_call: ToolCall, choice: Choice) -> dict[str, Any]:
+    async def _process_tool_call(self, tool_call: ToolCall, choice: Choice, response: Response) -> dict[str, Any]:
         """Process a tool call and update the message history."""
 
         tool_name = tool_call.function.name
@@ -132,11 +133,12 @@ class LLMAgent:
             choice,
             tool_name
         )
+        await response.aflush()
 
         tool = self._tools_dict[tool_name]
         stage.append_content(
             f"```json\n\r{json.dumps(json.loads(tool_call.function.arguments), indent=2)}\n\r```\n\r")
-        tool_message = await tool.execute(tool_call, stage)
+        tool_message = await tool.execute(tool_call, stage, response)
 
         StageProcessor.close_stage_safely(stage)
 

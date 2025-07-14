@@ -45,8 +45,9 @@ class SuperAgentApplication(ChatCompletion):
                 request=request
             ).handle_request(
                 choice=choice,
-                # deployment_name="gpt-4o"
-                deployment_name="anthropic.claude-sonnet-4-20250514-v1"
+                deployment_name="gpt-4o",
+                # deployment_name="anthropic.claude-sonnet-4-20250514-v1:0",
+                response=response
             )
 
 

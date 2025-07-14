@@ -30,12 +30,12 @@ def unpack_messages(messages: list[Message], state_history: list[dict[str, Any]]
 
                     msg = copy.deepcopy(message)
                     msg.custom_content = None
-                    result.append(msg.dict())
+                    result.append(msg.dict(exclude_none=True))
         else:
             msg = copy.deepcopy(message)
             if msg.custom_content and not msg.custom_content.attachments:
                 msg.custom_content = None
-            result.append(msg.dict())
+            result.append(msg.dict(exclude_none=True))
 
     if state_history:
         result.extend(state_history)
