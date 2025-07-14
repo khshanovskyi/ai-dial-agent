@@ -1,0 +1,73 @@
+{
+  "routes": {},
+  "applications": {
+    "super-agent": {
+      "displayName": "Super Agent",
+      "description": "Super Agent. Works with different DIAL Deployments and can make simple calculations.",
+      "endpoint": "http://host.docker.internal:5030/openai/deployments/super-agent/chat/completions"
+    }
+  },
+  "models": {
+    "gpt-4o": {
+      "displayName": "GPT 4o",
+      "endpoint": "http://adapter-dial:5000/openai/deployments/gpt-4o/chat/completions",
+      "iconUrl": "http://localhost:3001/gpt4.svg",
+      "type": "chat",
+      "upstreams": [
+        {
+          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gpt-4o/chat/completions",
+          "key": ""
+        }
+      ]
+    },
+    "anthropic.claude-sonnet-4-20250514-v1": {
+      "displayName": "Sonnet 4",
+      "endpoint": "http://adapter-dial:5000/openai/deployments/anthropic.claude-sonnet-4-20250514-v1/chat/completions",
+      "type": "chat",
+      "upstreams": [
+        {
+          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/anthropic.claude-sonnet-4-20250514-v1/chat/completions",
+          "key": ""
+        }
+      ]
+    },
+    "gemini-2.5-pro-preview-03-25-google-search": {
+      "displayName": "Gemini 2.5 Web Search",
+      "endpoint": "http://adapter-dial:5000/openai/deployments/gemini-2.5-pro-preview-03-25-google-search/chat/completions",
+      "iconUrl": "http://localhost:3001/Gemini-Pro-Vision.svg",
+      "type": "chat",
+      "upstreams": [
+        {
+          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gemini-2.5-pro-preview-03-25-google-search/chat/completions",
+          "key": ""
+        }
+      ]
+    },
+    "dial-rag": {
+      "displayName": "DIAL RAG",
+      "description": "The Dial RAG answers user questions using information from the documents provided by user.",
+      "endpoint": "http://adapter-dial:5000/openai/deployments/dial-rag/chat/completions",
+      "type": "chat",
+      "upstreams": [
+        {
+          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/dial-rag/chat/completions",
+          "key": ""
+        }
+      ],
+      "inputAttachmentTypes": [
+        "*/*"
+      ]
+    }
+  },
+  "keys": {
+    "dial_api_key": {
+      "project": "TEST-PROJECT",
+      "role": "default"
+    }
+  },
+  "roles": {
+    "default": {
+      "limits": {}
+    }
+  }
+}
