@@ -13,6 +13,7 @@ class ImageGenerationTool(DeploymentTool):
         if msg.custom_content and msg.custom_content.attachments:
             for attachment in msg.custom_content.attachments:
                 if attachment.type in ("image/png", "image/jpeg"):
+                    # Here is interesting point, we print the picture in choice directly (in stage it will be added as attachment)
                     choice.append_content(f"\n\r![image]({attachment.url})\n\r")
                     if not msg.content:
                         msg.content = 'The image has been successfully generated according to request and shown to user!'

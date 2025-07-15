@@ -18,6 +18,9 @@ class DeploymentTool(BaseTool, ABC):
     @property
     @abstractmethod
     def deployment_name(self) -> str:
+        """
+        Deployment name (model name, such as dalle-e-3, google-web-search, etc.)
+        """
         pass
 
     async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
@@ -28,7 +31,7 @@ class DeploymentTool(BaseTool, ABC):
         )
 
         arguments = json.loads(tool_call.function.arguments)
-        prompt = arguments.get("prompt")
+        prompt = arguments.get("prompt") # For deployments, we name the main request in all tools as `prompt` or `query`
         del arguments["prompt"]
         chunks = await client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
@@ -36,7 +39,7 @@ class DeploymentTool(BaseTool, ABC):
             deployment_name=self.deployment_name,
             extra_body={
                 "custom_fields": {
-                    "configuration": {**arguments}
+                    "configuration": {**arguments} # For some models we can provide additional configuration. (Check ImageGeneration tool with size param)
                 }
             }
         )
@@ -48,6 +51,7 @@ class DeploymentTool(BaseTool, ABC):
                 delta = chunk.choices[0].delta
                 if delta:
                     if delta.content:
+                        # Stream the content directly to Stage
                         stage.append_content(delta.content)
                         content += delta.content
                     if delta.custom_content and delta.custom_content.attachments:
@@ -55,6 +59,7 @@ class DeploymentTool(BaseTool, ABC):
                         custom_content.attachments.extend(attachments)
 
                         for attachment in attachments:
+                            # If deployment provides some attachments we propagate them to stage that user will be able to see them
                             stage.add_attachment(
                                 type=attachment.type,
                                 title=attachment.title,

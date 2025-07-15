@@ -10,7 +10,9 @@ from task.tools.base import BaseTool
 class CalculatorTool(BaseTool):
 
     async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
-        arguments = json.loads(tool_call.function.arguments)
+        #TODO:
+        # Get arguments as dict (use `json.loads()`). The arguments path: tool_call -> function -> arguments
+        arguments = None
 
         num1 = float(arguments["num1"])
         num2 = float(arguments["num2"])
@@ -30,24 +32,31 @@ class CalculatorTool(BaseTool):
         else:
             content = f"Error: Unknown operation '{operation}'"
 
-        stage.append_content(f"**{content}**")
+        #TODO:
+        # 1. Append `content` to `stage`. (We need it to show the execution result in stage for tool call)
+        # 2. Return Message with:
+        #   - role=Role.TOOL
+        #   - content=StrictStr(content)
+        #   - tool_call_id=StrictStr(tool_call.id) (Remember that we have to return tool call id, without it LLM will answer with error)
 
-        return Message(
-            role=Role.TOOL,
-            content=StrictStr(content),
-            tool_call_id=StrictStr(tool_call.id),
-        )
+        return None
 
     @property
     def name(self) -> str:
+        #TODO:
+        # return tool name "simple_calculator" (or another name, but it better to be self descriptive)
         return "simple_calculator"
 
     @property
     def description(self) -> str:
+        #TODO:
+        # return tool description (what this tool do?). With such description LLM will have more context about this tool.
         return "Provides result of basic math calculations"
 
     @property
     def parameters(self) -> dict[str, Any]:
+        # You don't need to change here anything, just take a look at the configuration and compare that with tool
+        # arguments in the `execute` method
         return {
             "type": "object",
             "properties": {

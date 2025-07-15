@@ -73,54 +73,40 @@ class SuperAgentApplication(ChatCompletion):
         self.endpoint = "http://localhost:8080"
         self.api_version = "2025-01-01-preview"
 
-        self.tools: list[BaseTool] = [
-            CalculatorTool(),
-            WebSearchTool(
-                endpoint=self.endpoint,
-                api_version=self.api_version,
-            ),
-            ImageGenerationTool(
-                endpoint=self.endpoint,
-                api_version=self.api_version,
-            )
-        ]
+        #TODO:
+        # 1. Create list with tools and assign as `self.tools: list[BaseTool]`:
+        #   - Add CalculatorTool (need to implement)
+        #   - Add WebSearchTool with `endpoint` and `api_version`
+        #   - Add ImageGenerationTool with `endpoint` and `api_version`
+        # 2. Create MCPClient and assign as `self._mcp_client`
+        # 3. Create `self._mcp_tools_loaded` variable with `False`
 
-        self._mcp_client = MCPClient()
-        self._mcp_tools_loaded = False
 
     async def _load_mcp_tools(self):
-        try:
-            await self._mcp_client.connect("http://localhost:8010/mcp")
-            for mcp_tool_model in await self._mcp_client.get_tools():
-                self.tools.append(
-                    MCPTool(
-                        client=self._mcp_client,
-                        mcp_tool_model=mcp_tool_model,
-                    )
-                )
-        except Exception as e:
-            print(f"Warning: Could not load MCP tools: {e}")
+        #TODO:
+        # 1. Connect to MCP server, mcp_server_url="http://localhost:8010/mcp"
+        # 2. With mcp client get tools and then append them to the `self.tools` as MCPTool. (The `get_tools()`
+        #   returns a list with MCPToolModel that we need to pass when creating MCPTool from each model)
+        pass
 
     async def chat_completion(
             self, request: Request, response: Response
     ) -> None:
-        if not self._mcp_tools_loaded:
-            await self._load_mcp_tools()
-            self._mcp_tools_loaded = True
-
-        with response.create_single_choice() as choice:
-            await LLMAgent(
-                endpoint=self.endpoint,
-                api_version=self.api_version,
-                system_prompt=SYSTEM_PROMPT,
-                tools=self.tools,
-                request=request
-            ).handle_request(
-                choice=choice,
-                deployment_name="gpt-4o",
-                response=response,
-                api_key=request.api_key
-            )
+        #TODO:
+        # 1. If not `self._mcp_tools_loaded` then call `await self._load_mcp_tools()` and set `self._mcp_tools_loaded` as True
+        # 2. Create `choice` (`with response.create_single_choice() as choice:`) and:
+        #   - Create LLMAgent with:
+        #       - endpoint=self.endpoint
+        #       - api_version=self.api_version
+        #       - system_prompt=SYSTEM_PROMPT
+        #       - tools=self.tools
+        #       - request=request
+        #   - call `handle_request` on created agent with:
+        #       - choice=choice
+        #       - deployment_name="gpt-4o"
+        #       - response=response
+        #       - api_key=request.api_key
+        pass
 
 
 app: DIALApp = DIALApp()
