@@ -188,46 +188,10 @@ Generate a random number between 1 and 100, then check if "racecar" is a palindr
 Generate a random number, then by this number search 'Magic of the {number}' and then based on the description generate an image
 ```
 
-### Add in chat some picture (png or jpeg) 
+### Add in Chat some picture (png or jpeg) 
 ```
 What do you see here?
 ```
-
-## 🔧 Optional: Postman Testing
-
-1. Import the provided `mcp.postman_collection.json`
-2. Test MCP server endpoints:
-    - **Initialize**: Get session ID
-    - **Initialize Notification**: Set up session
-    - **List Tools**: Retrieve available tools
-    - **Execute Tools**: Test tool functionality
-
-## 🎯 Expected Behavior
-
-The completed system should:
-
-1. **Intelligently Select Tools**: Choose appropriate tools based on user requests
-2. **Handle Complex Workflows**: Combine multiple tools for comprehensive responses
-3. **Maintain Context**: Keep track of tool executions and results
-4. **Stream Results**: Provide real-time feedback during tool execution
-5. **Error Handling**: Gracefully handle tool failures and edge cases
-
-## 🔍 Key Learning Points
-
-- **MCP Protocol**: Understanding how MCP enables tool interoperability
-- **Agent Architecture**: Building systems that can reason about and use tools
-- **Streaming Processing**: Handling real-time data flows
-- **Tool Composition**: Combining different types of tools effectively
-- **State Management**: Maintaining conversation context across tool calls
-
-## 📊 Success Metrics
-
-- ✅ MCP server running with all tools accessible
-- ✅ Calculator tool performing accurate calculations
-- ✅ Agent successfully orchestrating multiple tools
-- ✅ Complex requests handled with appropriate tool combinations
-- ✅ Streaming responses working smoothly
-- ✅ Error handling working for edge cases
 
 ---
 
