@@ -5,7 +5,6 @@ from typing import Any
 from aidial_client.types.chat.legacy.chat_completion import CustomContent, ToolCall
 from aidial_sdk.chat_completion import Message, Role, Choice, Request, Response
 from openai import AsyncAzureOpenAI
-from pydantic import SecretStr
 
 from task.tools.base import BaseTool
 from task.utils.constants import TOOL_CALL_HISTORY_KEY, CUSTOM_CONTENT
@@ -124,8 +123,6 @@ class LLMAgent:
         return unpacked_messages
 
     async def _process_tool_call(self, tool_call: ToolCall, choice: Choice, api_key: str) -> dict[str, Any]:
-        """Process a tool call and update the message history."""
-
         tool_name = tool_call.function.name
         stage = StageProcessor.open_stage(
             choice,
