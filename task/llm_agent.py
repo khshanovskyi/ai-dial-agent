@@ -2,14 +2,13 @@ import asyncio
 import json
 from typing import Any
 
+from aidial_client import AsyncDial
 from aidial_client.types.chat.legacy.chat_completion import CustomContent, ToolCall
 from aidial_sdk.chat_completion import Message, Role, Choice, Request, Response
-from openai import AsyncAzureOpenAI
 
 from task.tools.base import BaseTool
-from task.utils.constants import TOOL_CALL_HISTORY_KEY, CUSTOM_CONTENT
+from task.utils.constants import TOOL_CALL_HISTORY_KEY
 from task.utils.history import unpack_messages
-from task.utils.response import capture_attachments
 from task.utils.stage import StageProcessor
 
 
@@ -39,19 +38,17 @@ class LLMAgent:
     async def handle_request(
             self, choice: Choice, deployment_name: str, response: Response, api_key: str, **kwargs
     ) -> Message:
-        client: AsyncAzureOpenAI = AsyncAzureOpenAI(
-            azure_endpoint=self.endpoint,
+        client: AsyncDial = AsyncDial(
+            base_url=self.endpoint,
             api_key=api_key,
             api_version=self.api_version,
         )
 
         chunks = await client.chat.completions.create(
-            **{
-                "messages": self._prepare_messages(self.request.messages),
-                "tools": [tool.schema for tool in self.tools],
-                "stream": True,
-                "model": deployment_name,
-            }
+            messages=self._prepare_messages(self.request.messages),
+            tools=[tool.schema for tool in self.tools],
+            stream=True,
+            deployment_name=deployment_name,
         )
 
         tool_call_index_map = {}
@@ -63,9 +60,6 @@ class LLMAgent:
                 if delta and delta.content:
                     choice.append_content(delta.content)
                     content += delta.content
-
-                if custom_content_dict := getattr(chunk.choices[0].delta, CUSTOM_CONTENT, None):
-                    custom_content.attachments.extend(capture_attachments(custom_content_dict))
 
                 if delta.tool_calls:
                     for tool_call_delta in delta.tool_calls:

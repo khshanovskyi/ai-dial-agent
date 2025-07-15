@@ -40,6 +40,6 @@ def unpack_messages(messages: list[Message], state_history: list[dict[str, Any]]
         for history_msg in state_history:
             if history_msg.get(CUSTOM_CONTENT):
                 del history_msg[CUSTOM_CONTENT]
-            result.extend(state_history)
+            result.append(history_msg)
 
     return result
