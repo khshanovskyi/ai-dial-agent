@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from aidial_client.types.chat import ToolParam
-from aidial_sdk.chat_completion import Stage, Message, ToolCall, Response
+from aidial_sdk.chat_completion import Stage, Message, ToolCall, Choice
 
 
 class BaseTool(ABC):
 
     @abstractmethod
-    async def execute(self, tool_call: ToolCall, stage: Stage, response: Response) -> Message:
+    async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
         pass
 
     @property

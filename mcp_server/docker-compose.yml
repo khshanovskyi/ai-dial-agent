@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  simple-mcp-server:
+    build: .
+    ports:
+      - "8010:8010"

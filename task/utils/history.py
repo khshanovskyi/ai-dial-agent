@@ -3,7 +3,7 @@ from typing import Any
 
 from aidial_sdk.chat_completion import Message, Role
 
-from task.utils.constants import TOOL_CALL_HISTORY_KEY
+from task.utils.constants import TOOL_CALL_HISTORY_KEY, CUSTOM_CONTENT
 
 
 def unpack_messages(messages: list[Message], state_history: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -21,7 +21,6 @@ def unpack_messages(messages: list[Message], state_history: list[dict[str, Any]]
                                     {
                                         "role": Role.TOOL.value,
                                         "content": history_msg.get("content"),
-                                        "custom_content": history_msg.get("custom_content"),
                                         "tool_call_id": history_msg.get("tool_call_id"),
                                     }
                                 )
@@ -38,6 +37,9 @@ def unpack_messages(messages: list[Message], state_history: list[dict[str, Any]]
             result.append(msg.dict(exclude_none=True))
 
     if state_history:
-        result.extend(state_history)
+        for history_msg in state_history:
+            if history_msg.get(CUSTOM_CONTENT):
+                del history_msg[CUSTOM_CONTENT]
+            result.extend(state_history)
 
     return result

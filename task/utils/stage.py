@@ -9,9 +9,6 @@ class StageProcessor:
     def open_stage(choice: Choice, name: Optional[str] = None) -> Stage:
         stage = choice.create_stage(name)
         stage.open()
-        stage.append_content("")
-        print("Stage opened!!!")
-        print(stage._opened)
         return stage
 
     @staticmethod

@@ -22,10 +22,10 @@ class WebSearchTool(DeploymentTool):
         return {
             "type": "object",
             "properties": {
-                "query": {
+                "prompt": {
                     "type": "string",
                     "description": "The search query or question to search for on the web"
                 }
             },
-            "required": ["query"]
+            "required": ["prompt"]
         }

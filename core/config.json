@@ -3,8 +3,12 @@
   "applications": {
     "super-agent": {
       "displayName": "Super Agent",
-      "description": "Super Agent. Works with different DIAL Deployments and can make simple calculations.",
-      "endpoint": "http://host.docker.internal:5030/openai/deployments/super-agent/chat/completions"
+      "description": "Super Agent. Works with different DIAL Deployments, works with MCP tools, and performs simple calculations.",
+      "endpoint": "http://host.docker.internal:5030/openai/deployments/super-agent/chat/completions",
+      "inputAttachmentTypes": [
+        "image/png",
+        "image/jpeg"
+      ]
     }
   },
   "models": {
@@ -16,18 +20,7 @@
       "upstreams": [
         {
           "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gpt-4o/chat/completions",
-          "key": ""
-        }
-      ]
-    },
-    "anthropic.claude-sonnet-4-20250514-v1": {
-      "displayName": "Sonnet 4",
-      "endpoint": "http://adapter-dial:5000/openai/deployments/anthropic.claude-sonnet-4-20250514-v1/chat/completions",
-      "type": "chat",
-      "upstreams": [
-        {
-          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/anthropic.claude-sonnet-4-20250514-v1/chat/completions",
-          "key": ""
+          "key": "YOUR_API_KEY"
         }
       ]
     },
@@ -39,23 +32,20 @@
       "upstreams": [
         {
           "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gemini-2.5-pro-preview-03-25-google-search/chat/completions",
-          "key": ""
+          "key": "YOUR_API_KEY"
         }
       ]
     },
-    "dial-rag": {
-      "displayName": "DIAL RAG",
-      "description": "The Dial RAG answers user questions using information from the documents provided by user.",
-      "endpoint": "http://adapter-dial:5000/openai/deployments/dial-rag/chat/completions",
+    "dall-e-3": {
+      "displayName": "DALL-E",
+      "endpoint": "http://adapter-dial:5000/openai/deployments/dall-e-3/chat/completions",
+      "iconUrl": "http://localhost:3001/gpt3.svg",
       "type": "chat",
       "upstreams": [
         {
-          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/dial-rag/chat/completions",
-          "key": ""
+          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/dall-e-3/chat/completions",
+          "key": "YOUR_API_KEY"
         }
-      ],
-      "inputAttachmentTypes": [
-        "*/*"
       ]
     }
   },
