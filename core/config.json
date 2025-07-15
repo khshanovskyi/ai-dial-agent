@@ -1,53 +1,10 @@
 {
   "routes": {},
   "applications": {
-    "super-agent": {
-      "displayName": "Super Agent",
-      "description": "Super Agent. Works with different DIAL Deployments, works with MCP tools, and performs simple calculations.",
-      "endpoint": "http://host.docker.internal:5030/openai/deployments/super-agent/chat/completions",
-      "inputAttachmentTypes": [
-        "image/png",
-        "image/jpeg"
-      ]
-    }
+
   },
   "models": {
-    "gpt-4o": {
-      "displayName": "GPT 4o",
-      "endpoint": "http://adapter-dial:5000/openai/deployments/gpt-4o/chat/completions",
-      "iconUrl": "http://localhost:3001/gpt4.svg",
-      "type": "chat",
-      "upstreams": [
-        {
-          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gpt-4o/chat/completions",
-          "key": "YOUR_API_KEY"
-        }
-      ]
-    },
-    "gemini-2.5-pro-preview-03-25-google-search": {
-      "displayName": "Gemini 2.5 Web Search",
-      "endpoint": "http://adapter-dial:5000/openai/deployments/gemini-2.5-pro-preview-03-25-google-search/chat/completions",
-      "iconUrl": "http://localhost:3001/Gemini-Pro-Vision.svg",
-      "type": "chat",
-      "upstreams": [
-        {
-          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gemini-2.5-pro-preview-03-25-google-search/chat/completions",
-          "key": "YOUR_API_KEY"
-        }
-      ]
-    },
-    "dall-e-3": {
-      "displayName": "DALL-E",
-      "endpoint": "http://adapter-dial:5000/openai/deployments/dall-e-3/chat/completions",
-      "iconUrl": "http://localhost:3001/gpt3.svg",
-      "type": "chat",
-      "upstreams": [
-        {
-          "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/dall-e-3/chat/completions",
-          "key": "YOUR_API_KEY"
-        }
-      ]
-    }
+
   },
   "keys": {
     "dial_api_key": {
