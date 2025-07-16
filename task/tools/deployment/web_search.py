@@ -7,7 +7,7 @@ class WebSearchTool(DeploymentTool):
 
     @property
     def deployment_name(self) -> str:
-        return "gemini-2.5-pro-preview-03-25-google-search"
+        return "gemini-2.0-flash-exp-google-search"
 
     @property
     def name(self) -> str:
