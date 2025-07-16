@@ -8,50 +8,36 @@ from aidial_sdk.chat_completion import Stage, Message, ToolCall, Choice
 class BaseTool(ABC):
     """Base tool class"""
 
-    @abstractmethod
-    async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
-        """
-        Execute tool call.
+    #TODO:
+    # Create such methods:
+    # 1. Create async `execute` method:
+    #   - mark as `@abstractmethod`
+    #   - Parameters:
+    #       - tool_call: ToolCall
+    #       - stage: Stage
+    #       - choice: Choice
+    #       - api_key: str
+    #   - returns Message
+    #   - Instead of implementation add `pass`
+    # 2. Create `name` method:
+    #   - mark as `@property`
+    #   - mark as `@abstractmethod`
+    #   - returns str
+    #   - Instead of implementation add `pass`
+    # 3. Create `description` method:
+    #   - mark as `@property`
+    #   - mark as `@abstractmethod`
+    #   - returns str
+    #   - Instead of implementation add `pass`
+    # 4. Create `parameters` method:
+    #   - mark as `@property`
+    #   - mark as `@abstractmethod`
+    #   - returns dict[str, Any]
+    #   - Instead of implementation add `pass`
+    # 5. Create `schema` method:
+    #   - mark as `@property`
+    #   - returns ToolParam
+    #   - return ToolParam with such configuration:
+    #       - type="function"
+    #       - function=FunctionParam(name=self.name, description=self.description,  parameters=self.parameters)
 
-        :return: Message with tool execution result
-        """
-        pass
-
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """
-        Tool name should be unique for each tool and self-descriptive.
-        """
-        pass
-
-    @property
-    @abstractmethod
-    def description(self) -> str:
-        """
-        Provides description of the tool that will give to LLM more context about the tool and how to use it.
-        """
-        pass
-
-    @property
-    @abstractmethod
-    def parameters(self) -> dict[str, Any]:
-        """
-        Provides tools parameters JSON Schema
-        """
-        pass
-
-    @property
-    def schema(self) -> ToolParam:
-        """
-        Collects tool JSON Schema according to the Specification:
-        https://dialx.ai/dial_api#operation/sendChatCompletionRequest (-> tools -> function)
-        """
-        return ToolParam(
-            type="function",
-            function=FunctionParam(
-                name=self.name,
-                description=self.description,
-                parameters=self.parameters
-            )
-        )

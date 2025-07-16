@@ -11,67 +11,67 @@ from aidial_sdk.chat_completion import Stage, Message, Role, ToolCall, CustomCon
 
 class DeploymentTool(BaseTool, ABC):
 
-    def __init__(self, endpoint: str, api_version: str, ):
-        self.endpoint = endpoint
-        self.api_version = api_version
+    #TODO:
+    # Create such methods:
+    # 1. Create constructor with:
+    #       - endpoint: str
+    #       - api_version: str
+    # 2. Create `deployment_name` method (each child of DeploymentTool will have preconfigured deployment name, such
+    #    as dalle-e-3, google-web-search, etc.):
+    #   - mark as `@property`
+    #   - mark as `@abstractmethod`
+    #   - returns str
+    #   - Instead of implementation add `pass`
 
-    @property
-    @abstractmethod
-    def deployment_name(self) -> str:
-        """
-        Deployment name (model name, such as dalle-e-3, google-web-search, etc.)
-        """
-        pass
 
     async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
-        client: AsyncDial = AsyncDial(
-            base_url=self.endpoint,
-            api_key=api_key,
-            api_version=self.api_version,
-        )
+        #TODO:
+        # Create client with:
+        #   - base_url=self.endpoint
+        #   - api_key=api_key
+        #   - api_version=self.api_version
+        client: AsyncDial = None
 
-        arguments = json.loads(tool_call.function.arguments)
-        prompt = arguments.get("prompt") # For deployments, we name the main request in all tools as `prompt` or `query`
-        del arguments["prompt"]
+        #TODO:
+        # 1. Get arguments as dict (use `json.loads()`) and assign to `arguments` variable
+        # 2. Get `prompt` value from `arguments` and assign to `prompt` variable. `prompt` is the text request from LLM
+        #    that we will later pass as message content.
+        # 3. Delete `prompt` from `arguments` (del arguments["prompt"]). We need it since LLM can provide additional
+        #    arguments that we will propagate to deployment via `custom_fields` and `prompt` is not need there.
+
         chunks = await client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
-            stream=True,
-            deployment_name=self.deployment_name,
-            extra_body={
-                "custom_fields": {
-                    "configuration": {**arguments} # For some models we can provide additional configuration. (Check ImageGeneration tool with size param)
-                }
-            }
+            #TODO:
+            # Configure call to chat completion:
+            #   - messages=[{"role": "user", "content": prompt}]
+            #   - deployment_name=self.deployment_name
+            #   - stream=True (we will stream response from deployment to stage)
+            #   - extra_body={"custom_fields":{"configuration": {**arguments}}} (For some models we can provide additional configuration)
         )
 
         content = ''
         custom_content: CustomContent = CustomContent(attachments=[])
         async for chunk in chunks:
             if chunk.choices and len(chunk.choices) > 0:
-                delta = chunk.choices[0].delta
-                if delta:
-                    if delta.content:
-                        # Stream the content directly to Stage
-                        stage.append_content(delta.content)
-                        content += delta.content
-                    if delta.custom_content and delta.custom_content.attachments:
-                        attachments = delta.custom_content.attachments
-                        custom_content.attachments.extend(attachments)
-
-                        for attachment in attachments:
-                            # If deployment provides some attachments we propagate them to stage that user will be able to see them
-                            stage.add_attachment(
-                                type=attachment.type,
-                                title=attachment.title,
-                                data=attachment.data,
-                                url=attachment.url,
-                                reference_url=attachment.reference_url,
-                                reference_type=attachment.reference_type,
-                            )
+                #TODO:
+                # Now let's handle stream with ChatCompletionChunk:
+                # 1. Get `delta` from chunk (`chunk.choices[0].delta`) and assign to `delta` variable
+                # 2. If `delta` is present and has `content`:
+                #   - append `delta.content` to `stage`
+                #   - collect `delta.content` to `content` (we need to form an tool message later)
+                # 3. Collect attachments:
+                #   - if `delta` is present and has `custom_content` with ``attachments:
+                #       - get attachments and assign them to the `attachments` variable
+                #       - extend `custom_content.attachments` with retrieved `attachments`
+                #       - iterate through `attachments` and add them to stage (add_attachment method):
+                #       - `stage.add_attachment(type=attachment.type, title=attachment.title, data=attachment.data, url=attachment.url,
+                #                              reference_url=attachment.reference_url,reference_type=attachment.reference_type)`
+                raise
 
         return Message(
-            role=Role.TOOL,
-            content=StrictStr(content),
-            custom_content=custom_content,
-            tool_call_id=StrictStr(tool_call.id),
+            #TODO:
+            # Configure tool message:
+            #   - role=Role.TOOL
+            #   - content=StrictStr(content)
+            #   - custom_content=custom_content
+            #   - tool_call_id=StrictStr(tool_call.id)
         )

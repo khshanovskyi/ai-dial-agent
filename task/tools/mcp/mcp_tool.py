@@ -11,31 +11,34 @@ from task.tools.mcp.mcp_tool_model import MCPToolModel
 
 class MCPTool(BaseTool):
 
-    def __init__(self, client: MCPClient, mcp_tool_model: MCPToolModel):
-        self._client = client
-        self._mcp_tool_model = mcp_tool_model
+    pass
 
-    async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
-        arguments = json.loads(tool_call.function.arguments)
+    #TODO:
+    # Create constructor with:
+    #   - client: MCPClient
+    #   - mcp_tool_model: MCPToolModel
 
-        content = await self._client.call_tool(self.name, arguments)
+    #TODO:
+    # Override async `execute` method (here we will call mcp tool via mcp `client`):
+    #   1. Get arguments as dict (use `json.loads()`) and assign to `arguments` variable
+    #   2. Call tool via `client` and assign result as `content` variable
+    #   3. Append retrieved content to stage
+    #   4. return Message:
+    #       - role=Role.TOOL
+    #       - content=StrictStr(content)
+    #       - tool_call_id=StrictStr(tool_call.id)
 
-        stage.append_content(content)
 
-        return Message(
-            role=Role.TOOL,
-            content=StrictStr(content),
-            tool_call_id=StrictStr(tool_call.id),
-        )
+    #TODO:
+    # 1. Implement `name` method:
+    #   - mark as `@property`
+    #   - return `self._mcp_tool_model.name`
+    # ---
+    # 2. Implement `description` method:
+    #   - mark as `@property`
+    #   - return `self._mcp_tool_model.description`
+    # ---
+    # 3. Implement `parameters` method:
+    #   - mark as `@property`
+    #   - return `self._mcp_tool_model.parameters`
 
-    @property
-    def name(self) -> str:
-        return self._mcp_tool_model.name
-
-    @property
-    def description(self) -> str:
-        return self._mcp_tool_model.description
-
-    @property
-    def parameters(self) -> dict[str, Any]:
-        return self._mcp_tool_model.parameters

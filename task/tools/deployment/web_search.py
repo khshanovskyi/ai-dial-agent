@@ -5,27 +5,37 @@ from task.tools.deployment.base import DeploymentTool
 
 class WebSearchTool(DeploymentTool):
 
-    @property
-    def deployment_name(self) -> str:
-        return "gemini-2.0-flash-exp-google-search"
+    #TODO:
+    # 1. Implement `deployment_name` method:
+    #   - mark as `@property`
+    #   - return deployment name "gemini-2.0-flash-exp-google-search" (or another deployment name with web search model)
+    # ---
+    # 2. Implement `name` method:
+    #   - mark as `@property`
+    #   - return tool name "simple_calculator" (or another name, but it better to be self-descriptive)
+    # ---
+    # 3. Implement `description` method:
+    #   - mark as `@property`
+    #   - return tool description (what this tool do?). With such description LLM will have more context about this tool.
+    # ---
+    # 4. Implement `parameters` method:
+    #   - mark as `@property`
+    #   - returns dict with properties configuration according to Specification
+    #         https://dialx.ai/dial_api#operation/sendChatCompletionRequest (-> tools -> function).
+    #     Pay attention that we should have the `prompt` property name in schema (it is using as user message in the DeploymentTool)
+    pass
 
-    @property
-    def name(self) -> str:
-        return "web_search"
 
-    @property
-    def description(self) -> str:
-        return "Performs WEB search."
-
-    @property
-    def parameters(self) -> dict[str, Any]:
-        return {
-            "type": "object",
-            "properties": {
-                "prompt": {
-                    "type": "string",
-                    "description": "The search query or question to search for on the web"
-                }
-            },
-            "required": ["prompt"]
-        }
+#Sample of the properties configuration:
+# {
+#     "type": "object",
+#     "properties": {
+#         "prompt": {
+#             "type": "string",
+#             "description": "Your param description"
+#         }
+#     },
+#     "required": [
+#         "prompt"
+#     ]
+# }

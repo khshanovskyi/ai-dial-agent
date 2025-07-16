@@ -1,24 +1,27 @@
 from typing import Any
 
 from aidial_sdk.chat_completion import ToolCall, Stage, Message, Choice
+from pydantic import StrictStr
 
 from task.tools.deployment.base import DeploymentTool
 
 
 class ImageGenerationTool(DeploymentTool):
 
-    async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
-        msg =  await super().execute(tool_call, stage, choice, api_key)
-
-        if msg.custom_content and msg.custom_content.attachments:
-            for attachment in msg.custom_content.attachments:
-                if attachment.type in ("image/png", "image/jpeg"):
-                    # Here is interesting point, we print the picture in choice directly (in stage it will be added as attachment)
-                    choice.append_content(f"\n\r![image]({attachment.url})\n\r")
-                    if not msg.content:
-                        msg.content = 'The image has been successfully generated according to request and shown to user!'
-
-        return msg
+    #TODO:
+    # Override async `execute` method (here we will additionally propagate the picture to Choice):
+    #   1. Get result of execution from parent class `super().execute` and assign it to `msg` variable
+    #   2. If `msg` has `custom_content` and `attachments`:
+    #       - Iterate through attachments and if `attachment.type` in ("image/png", "image/jpeg"):
+    #           - append such content to `choice`: `f"\n\r![image]({attachment.url})\n\r"`
+    #             DIAL Core will load image by this url from bucket directly to the choice in chat and user will be able to see it
+    #   3. If `msg` doesn't have `content`:
+    #       - Add to `msg.content` info that image has been generated and shown to user
+    #   4. return msg
+    # ---
+    # All other required methods are implemented, you can check them.
+    # Pay attention at the `properties` (size, style, quality) - it is additional configuration for `dall-e-3` model
+    # and they will be passed as `extra_body -> custom_fields -> configuration` additional arguments (they are custom)
 
     @property
     def deployment_name(self) -> str:
