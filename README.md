@@ -303,5 +303,8 @@ What do you see here?
 ```
 
 ---
+# <img src="design.png">
+
+---
 
 # <img src="dialx-banner.png">
