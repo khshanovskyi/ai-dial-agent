@@ -47,7 +47,8 @@ project/
 └── requirements.txt                 ✅ Dependencies
 ```
 
-<img src="design.png">
+# <img src="design.png">
+
 ---
 
 ## 📋 Requirements
