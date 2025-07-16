@@ -47,6 +47,9 @@ project/
 └── requirements.txt                 ✅ Dependencies
 ```
 
+<img src="design.png">
+---
+
 ## 📋 Requirements
 
 - **Python**: 3.11 or higher
