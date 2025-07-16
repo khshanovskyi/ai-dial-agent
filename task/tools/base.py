@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from aidial_client.types.chat import ToolParam
+from aidial_client.types.chat import ToolParam, FunctionParam
 from aidial_sdk.chat_completion import Stage, Message, ToolCall, Choice
 
 
@@ -28,11 +28,11 @@ class BaseTool(ABC):
 
     @property
     def schema(self) -> ToolParam:
-        return {
-            "type": "function",
-            "function": {
-                "name": self.name,
-                "description": self.description,
-                "parameters": self.parameters
-            }
-        }
+        return ToolParam(
+            type="function",
+            function=FunctionParam(
+                name=self.name,
+                description=self.description,
+                parameters=self.parameters
+            )
+        )
