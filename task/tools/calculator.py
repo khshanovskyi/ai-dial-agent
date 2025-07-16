@@ -45,13 +45,11 @@ class CalculatorTool(BaseTool):
     def name(self) -> str:
         #TODO:
         # return tool name "simple_calculator" (or another name, but it better to be self descriptive)
-        return "simple_calculator"
 
     @property
     def description(self) -> str:
         #TODO:
         # return tool description (what this tool do?). With such description LLM will have more context about this tool.
-        return "Provides result of basic math calculations"
 
     @property
     def parameters(self) -> dict[str, Any]:
