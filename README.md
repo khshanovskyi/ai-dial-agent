@@ -142,14 +142,14 @@ Add in the [core/config.json](core/config.json) such configurations:
             }
           ]
         },
-        "gemini-2.0-flash-exp-google-search": {
-          "displayName": "Gemini 2.0 Web Search",
-          "endpoint": "http://adapter-dial:5000/openai/deployments/gemini-2.0-flash-exp-google-search/chat/completions",
+        "gemini-2.5-pro": {
+          "displayName": "Gemini 2.5 Pro",
+          "endpoint": "http://adapter-dial:5000/openai/deployments/gemini-2.5-pro/chat/completions",
           "iconUrl": "http://localhost:3001/Gemini-Pro-Vision.svg",
           "type": "chat",
           "upstreams": [
             {
-              "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gemini-2.0-flash-exp-google-search/chat/completions",
+              "endpoint": "https://ai-proxy.lab.epam.com/openai/deployments/gemini-2.5-pro/chat/completions",
               "key": "YOUR_API_KEY"
             }
           ]

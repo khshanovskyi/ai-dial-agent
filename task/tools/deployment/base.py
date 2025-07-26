@@ -1,5 +1,6 @@
 import json
 from abc import ABC, abstractmethod
+from typing import Any
 
 from aidial_client import AsyncDial
 from pydantic import StrictStr
@@ -23,6 +24,13 @@ class DeploymentTool(BaseTool, ABC):
         """
         pass
 
+    @property
+    def tool_parameters(self) -> dict[str, Any]:
+        """
+        Additional tool parameters
+        """
+        return {}
+
     async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
         client: AsyncDial = AsyncDial(
             base_url=self.endpoint,
@@ -41,7 +49,8 @@ class DeploymentTool(BaseTool, ABC):
                 "custom_fields": {
                     "configuration": {**arguments} # For some models we can provide additional configuration. (Check ImageGeneration tool with size param)
                 }
-            }
+            },
+            **self.tool_parameters,
         )
 
         content = ''
