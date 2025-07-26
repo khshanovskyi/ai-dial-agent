@@ -1,5 +1,6 @@
 import json
 from abc import ABC, abstractmethod
+from typing import Any
 
 from aidial_client import AsyncDial
 from pydantic import StrictStr
@@ -22,6 +23,10 @@ class DeploymentTool(BaseTool, ABC):
     #   - mark as `@abstractmethod`
     #   - returns str
     #   - Instead of implementation add `pass`
+    # 3. Create `tool_parameters` method (this method will provide additional preconfigured parameters):
+    #   - mark as `@property`
+    #   - returns dict[str, Any]
+    #   - return empty dict (by default)
 
 
     async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
@@ -46,6 +51,7 @@ class DeploymentTool(BaseTool, ABC):
             #   - deployment_name=self.deployment_name
             #   - stream=True (we will stream response from deployment to stage)
             #   - extra_body={"custom_fields":{"configuration": {**arguments}}} (For some models we can provide additional configuration)
+            #   - **self.tool_parameters
         )
 
         content = ''
