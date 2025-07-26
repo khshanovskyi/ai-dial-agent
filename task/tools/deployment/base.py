@@ -1,5 +1,6 @@
 import json
 from abc import ABC, abstractmethod
+from typing import Any
 
 from aidial_client import AsyncDial
 from pydantic import StrictStr
@@ -20,6 +21,10 @@ class DeploymentTool(BaseTool, ABC):
     def deployment_name(self) -> str:
         pass
 
+    @property
+    def tool_parameters(self) -> dict[str, Any]:
+        return {}
+
     async def execute(self, tool_call: ToolCall, stage: Stage, choice: Choice, api_key: str) -> Message:
         client: AsyncDial = AsyncDial(
             base_url=self.endpoint,
@@ -38,7 +43,8 @@ class DeploymentTool(BaseTool, ABC):
                 "custom_fields": {
                     "configuration": {**arguments}
                 }
-            }
+            },
+            **self.tool_parameters,
         )
 
         content = ''

@@ -7,7 +7,23 @@ class WebSearchTool(DeploymentTool):
 
     @property
     def deployment_name(self) -> str:
-        return "gemini-2.0-flash-exp-google-search"
+        return "gemini-2.5-pro"
+
+    @property
+    def tool_parameters(self) -> dict[str, Any]:
+        return {
+            "tools": [
+                {
+                    "type": "static_function",
+                    "static_function": {
+                        "name": "google_search",
+                        "description": "Grounding with Google Search",
+                        "configuration": {}
+                    }
+                }
+            ],
+            "temperature": 0
+        }
 
     @property
     def name(self) -> str:
